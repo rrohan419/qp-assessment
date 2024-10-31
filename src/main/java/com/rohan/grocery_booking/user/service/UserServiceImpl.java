@@ -3,7 +3,6 @@
  */
 package com.rohan.grocery_booking.user.service;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -81,6 +80,25 @@ public class UserServiceImpl implements UserService {
 		userRole.setUser(user);
 
 		return userRoleRepository.save(userRole);
+	}
+
+	/**
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param userUuid
+	 * @param userType
+	 * @return
+	 */
+	@Override
+	public void matchUserRole(String userUuid, UserType userType) {
+		User user = userDao.userByUuid(userUuid);
+		
+		if(user != null && user.getUserTypeSet() != null && !user.getUserTypeSet().isEmpty() && user.getUserTypeSet().contains(userType)) {
+//			return user.getUserTypeSet().contains(userType);
+		} else {
+			throw new CustomException("You don't have the required permission or you are not registered.", HttpStatus.UNAUTHORIZED);
+		}
 	}
 
 }

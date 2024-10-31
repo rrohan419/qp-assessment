@@ -31,4 +31,14 @@ public interface UserService {
 	 * @return {@link UserRole}
 	 */
 	UserRole addRoleToUser(User user, UserType userType);
+	
+	/**
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param userUuid
+	 * @param userType
+	 * @return
+	 */
+	void matchUserRole(String userUuid, UserType userType);
 }

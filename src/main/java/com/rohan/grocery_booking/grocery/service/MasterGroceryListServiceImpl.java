@@ -9,12 +9,14 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.rohan.grocery_booking.common.enums.UserType;
 import com.rohan.grocery_booking.common.exception.CustomException;
 import com.rohan.grocery_booking.common.util.Mapper;
 import com.rohan.grocery_booking.grocery.dao.MasterGroceryListDao;
 import com.rohan.grocery_booking.grocery.dto.MasterGroceryDto;
 import com.rohan.grocery_booking.grocery.entity.MasterGroceryList;
 import com.rohan.grocery_booking.grocery.model.MasterGroceryModel;
+import com.rohan.grocery_booking.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,10 +28,12 @@ import lombok.RequiredArgsConstructor;
 public class MasterGroceryListServiceImpl implements MasterGroceryListService {
 
 	private final MasterGroceryListDao masterGroceryListDao;
+	private final UserService userService;
 	private final Mapper mapper;
 
 	@Override
 	public MasterGroceryModel addGroceryInMaster(MasterGroceryDto masterGroceryDto, String userUuid) {
+		userService.matchUserRole(userUuid, UserType.ADMIN);
 		boolean exists = masterGroceryListDao.groceryExistsByName(masterGroceryDto.getName());
 
 		if (exists) {
@@ -46,6 +50,7 @@ public class MasterGroceryListServiceImpl implements MasterGroceryListService {
 
 	@Override
 	public List<MasterGroceryModel> getMasterGroceryList(String userUuid) {
+		userService.matchUserRole(userUuid, UserType.ADMIN);
 		return mapper.convertToList(masterGroceryListDao.fetchAllActiveList(), MasterGroceryModel.class);
 	}
 
