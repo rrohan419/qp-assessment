@@ -4,10 +4,7 @@
 package com.rohan.grocery_booking.common.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * @author rrohan419@gmail.com
@@ -42,6 +39,16 @@ public class CustomException extends RuntimeException {
 		this.detail = detail;
 	}
 
+	/**
+	 * @author rrohan419@gmail.com
+	 * @param message
+	 */
+	public CustomException(String message) {
+		super(message);
+		this.httpStatus = null;
+		this.detail = null;
+	}
+	
 	/**
 	 * Constructs new custom exception with message and http status
 	 * 

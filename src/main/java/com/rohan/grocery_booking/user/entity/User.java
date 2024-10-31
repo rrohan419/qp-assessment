@@ -13,6 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.rohan.grocery_booking.common.entity.BaseEntity;
 import com.rohan.grocery_booking.common.enums.EntityStatus;
 import com.rohan.grocery_booking.common.enums.UserType;
+import com.rohan.grocery_booking.grocery.entity.UserGroceryCollection;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -61,6 +62,9 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	@ToString.Exclude
 	private List<UserRole> userRoles;
+	
+//	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//	private List<UserGroceryCollection> userGroceryCollections;
 	
 	/**
 	 * Converts the user roles to a Set of UserType.
