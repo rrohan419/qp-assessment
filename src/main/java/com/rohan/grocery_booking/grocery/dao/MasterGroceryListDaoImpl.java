@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class MasterGroceryListDaoImpl implements MasterGroceryListDao {
 
 	private final MasterGroceryListRepository masterGroceryListRepository;
-	
+
 	@Override
 	public MasterGroceryList saveGrocery(MasterGroceryList masterGroceryList) {
 		try {
@@ -44,7 +44,7 @@ public class MasterGroceryListDaoImpl implements MasterGroceryListDao {
 	@Override
 	public void deleteGrocery(String uuid) {
 		try {
-			 masterGroceryListRepository.deleteByUuid(uuid);
+			masterGroceryListRepository.deleteByUuid(uuid);
 		} catch (Exception e) {
 			throw new CustomException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -55,7 +55,23 @@ public class MasterGroceryListDaoImpl implements MasterGroceryListDao {
 	public boolean groceryExistsByName(String name) {
 		try {
 			return masterGroceryListRepository.existsByName(name);
+		} catch (Exception e) {
+			throw new CustomException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
+	/**
+	 * master grocery item by uuid
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param uuid
+	 * @return {@link MasterGroceryList}
+	 */
+	@Override
+	public MasterGroceryList masterGroceryByUuid(String uuid) {
+		try {
+			return masterGroceryListRepository.findByUuid(uuid);
 		} catch (Exception e) {
 			throw new CustomException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}

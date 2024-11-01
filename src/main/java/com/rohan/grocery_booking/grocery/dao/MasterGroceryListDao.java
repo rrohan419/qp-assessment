@@ -50,4 +50,14 @@ public interface MasterGroceryListDao {
 	 */
 	boolean groceryExistsByName(String name);
 	
+	/**
+	 * master grocery item by uuid
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param uuid
+	 * @return {@link MasterGroceryList}
+	 */
+	MasterGroceryList masterGroceryByUuid(String uuid);
+	
 }

@@ -31,6 +31,15 @@ public class MasterGroceryListServiceImpl implements MasterGroceryListService {
 	private final UserService userService;
 	private final Mapper mapper;
 
+	/**
+	 * add grocery by admin user
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param masterGroceryDto
+	 * @param userUuid
+	 * @return {@link MasterGroceryModel}
+	 */
 	@Override
 	public MasterGroceryModel addGroceryInMaster(MasterGroceryDto masterGroceryDto, String userUuid) {
 		userService.matchUserRole(userUuid, UserType.ADMIN);
@@ -48,6 +57,15 @@ public class MasterGroceryListServiceImpl implements MasterGroceryListService {
 		}
 	}
 
+	/**
+	 * get all master grocery list
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param userUuid
+	 * @return {@link List}
+	 * @see MasterGroceryModel
+	 */
 	@Override
 	public List<MasterGroceryModel> getMasterGroceryList(String userUuid) {
 		userService.matchUserRole(userUuid, UserType.ADMIN);
