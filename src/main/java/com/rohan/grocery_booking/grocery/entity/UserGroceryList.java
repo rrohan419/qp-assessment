@@ -42,10 +42,10 @@ public class UserGroceryList extends BaseEntity {
 	private Double price;
 	
 	@Column(nullable = false)
-	private Integer quantity;
+	@Builder.Default
+	private Double quantity = 0D;
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private MasterGroceryList masterGroceryList;
-	
-	
+
 }

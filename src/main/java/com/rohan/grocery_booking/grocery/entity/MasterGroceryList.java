@@ -59,9 +59,12 @@ public class MasterGroceryList extends BaseEntity {
 	private Double price;
 	
 	@Column(nullable = false)
-	private Integer quantity;
+	private Double quantity;
 	
 	@Column(nullable = false)
 	private String quantityUnit;
+	
+	@Column(nullable = false)
+	private Double leftQuantity;
 	
 }

@@ -50,7 +50,7 @@ public class MasterGroceryListServiceImpl implements MasterGroceryListService {
 					HttpStatus.CONFLICT);
 		} else {
 			MasterGroceryList masterGroceryList = MasterGroceryList.builder().uuid(UUID.randomUUID().toString()).category(masterGroceryDto.getCategory())
-					.name(masterGroceryDto.getName()).currency("INR").price(masterGroceryDto.getPrice())
+					.name(masterGroceryDto.getName()).currency("INR").price(masterGroceryDto.getPrice()).leftQuantity(masterGroceryDto.getQuantity())
 					.quantity(masterGroceryDto.getQuantity()).quantityUnit(masterGroceryDto.getQuantityUnit()).createdBy(userUuid).build();
 			
 			return mapper.convert(masterGroceryListDao.saveGrocery(masterGroceryList), MasterGroceryModel.class);

@@ -17,7 +17,7 @@ public class UserGroceryListModel {
 	
 	private Double price;
 	
-	private Integer quantity;
+	private Double quantity;
 	
 	private String masterGroceryListUuid;
 	

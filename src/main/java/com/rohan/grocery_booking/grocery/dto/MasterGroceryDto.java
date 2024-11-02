@@ -20,7 +20,7 @@ public class MasterGroceryDto {
 	private Double price;
 	
 	@NotNull
-	private Integer quantity;
+	private Double quantity;
 	
 	@NotBlank
 	private String quantityUnit;

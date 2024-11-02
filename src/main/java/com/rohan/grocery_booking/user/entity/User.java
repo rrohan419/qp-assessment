@@ -13,13 +13,13 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.rohan.grocery_booking.common.entity.BaseEntity;
 import com.rohan.grocery_booking.common.enums.EntityStatus;
 import com.rohan.grocery_booking.common.enums.UserType;
-import com.rohan.grocery_booking.grocery.entity.UserGroceryCollection;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -59,7 +59,7 @@ public class User extends BaseEntity {
 	@Column
 	private String phoneNumber;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@ToString.Exclude
 	private List<UserRole> userRoles;
 	

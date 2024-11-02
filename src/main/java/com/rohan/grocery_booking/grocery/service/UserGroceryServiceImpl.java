@@ -9,9 +9,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.rohan.grocery_booking.common.enums.UserType;
+import com.rohan.grocery_booking.common.exception.CustomException;
 import com.rohan.grocery_booking.common.util.Mapper;
 import com.rohan.grocery_booking.grocery.dao.MasterGroceryListDao;
 import com.rohan.grocery_booking.grocery.dao.UserGroceryCollectionDao;
@@ -24,6 +26,7 @@ import com.rohan.grocery_booking.grocery.entity.UserGroceryList;
 import com.rohan.grocery_booking.grocery.model.UserGroceryCollectionModel;
 import com.rohan.grocery_booking.user.service.UserService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -47,6 +50,7 @@ public class UserGroceryServiceImpl implements UserGroceryService {
 	 * @param userGroceryDto
 	 * @param userUuid
 	 */
+	@Transactional
 	@Override
 	public UserGroceryCollectionModel saveOrUpdateUserGrocery(UserGroceryDto userGroceryDto, String userUuid) {
 		userService.matchUserRole(userUuid, UserType.USER);
@@ -76,6 +80,7 @@ public class UserGroceryServiceImpl implements UserGroceryService {
 							return createUserGroceryList(userGroceryListDto);
 						}).toList();
 
+				userGroceryLists = userGroceryListDao.saveAllGroceryLists(userGroceryLists);
 				groceryCollection.setUserGroceryLists(userGroceryLists);
 				return mapper.convert(userGroceryCollectionDao.saveUserGroceryCollection(groceryCollection),
 						UserGroceryCollectionModel.class);
@@ -161,7 +166,6 @@ public class UserGroceryServiceImpl implements UserGroceryService {
 		UserGroceryList userGroceryList = new UserGroceryList();
 		userGroceryList.setUuid(UUID.randomUUID().toString());
 		userGroceryList.setMasterGroceryList(masterGroceryList);
-
 		updateGroceryList(userGroceryList, userGroceryListDto);
 
 		return userGroceryList;
@@ -176,10 +180,24 @@ public class UserGroceryServiceImpl implements UserGroceryService {
 	 */
 	private void updateGroceryList(UserGroceryList userGroceryList, UserGroceryListDto userGroceryListDto) {
 		MasterGroceryList masterGroceryList = userGroceryList.getMasterGroceryList();
-
-		userGroceryList.setQuantity(userGroceryListDto.getQuantity());
-		userGroceryList.setName(masterGroceryList.getName());
-		userGroceryList.setPrice(masterGroceryList.getPrice());
+		
+		Double leftQuantity = masterGroceryList.getLeftQuantity() +  userGroceryList.getQuantity();
+		
+		Double isPurachasePossible = leftQuantity - userGroceryListDto.getQuantity();
+		
+		if(isPurachasePossible >= 0) {
+			userGroceryList.setQuantity(userGroceryListDto.getQuantity());
+			userGroceryList.setName(masterGroceryList.getName());
+			userGroceryList.setPrice(masterGroceryList.getPrice());
+			
+			masterGroceryList.setLeftQuantity(isPurachasePossible);
+			masterGroceryList = masterGroceryListDao.saveGrocery(masterGroceryList);
+			
+			userGroceryList.setMasterGroceryList(masterGroceryList);
+		} else {
+			throw new CustomException("We have only "+leftQuantity +" "+masterGroceryList.getQuantityUnit()+" left in our inventory.", HttpStatus.FORBIDDEN);
+		}
+		
 	}
 
 }

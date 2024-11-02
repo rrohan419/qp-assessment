@@ -23,7 +23,7 @@ public class MasterGroceryModel {
 	
 	private Double price;
 	
-	private Integer quantity;
+	private Double quantity;
 	
 	private String quantityUnit;
 	

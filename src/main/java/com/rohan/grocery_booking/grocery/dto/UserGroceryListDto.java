@@ -15,7 +15,7 @@ public class UserGroceryListDto {
 	
 //	private Double price;
 	
-	private Integer quantity;
+	private Double quantity;
 	
 	private String userGroceryListUuid;
 	
