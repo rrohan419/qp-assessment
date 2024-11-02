@@ -34,13 +34,13 @@ public class MasterGroceryListController {
 
 	@PostMapping(ApiUrl.ADMIN_ADD_GROCERY)
 	public ResponseEntity<MasterGroceryModel> saveGroceryList(@RequestBody @Valid MasterGroceryDto masterGroceryDto,
-			@RequestParam String userUuid) {
+			@RequestParam(required = true) String userUuid) {
 		MasterGroceryModel respose = masterGroceryListService.addGroceryInMaster(masterGroceryDto, userUuid);
 		return new ResponseEntity<>(respose, HttpStatus.OK);
 	}
 
 	@GetMapping(ApiUrl.ADMIN_FETCH_ALL_GROCERY)
-	public ResponseEntity<List<MasterGroceryModel>> fetchAllGroceryList(@RequestParam String userUuid) {
+	public ResponseEntity<List<MasterGroceryModel>> fetchAllGroceryList(@RequestParam(required = true) String userUuid) {
 		List<MasterGroceryModel> respose = masterGroceryListService.getMasterGroceryList(userUuid);
 		return new ResponseEntity<>(respose, HttpStatus.OK);
 	}

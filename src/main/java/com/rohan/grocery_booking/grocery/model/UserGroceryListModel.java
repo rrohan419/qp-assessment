@@ -3,19 +3,13 @@
  */
 package com.rohan.grocery_booking.grocery.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @author rrohan419@gmail.com
  */
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class MasterGroceryModel {
+public class UserGroceryListModel {
 
 	private String uuid;
 	
@@ -25,9 +19,6 @@ public class MasterGroceryModel {
 	
 	private Integer quantity;
 	
-	private String quantityUnit;
-	
-	private String category;
-	
+	private String masterGroceryListUuid;
 	
 }

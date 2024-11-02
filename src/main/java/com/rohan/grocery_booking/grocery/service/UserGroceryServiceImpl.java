@@ -3,6 +3,7 @@
  */
 package com.rohan.grocery_booking.grocery.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.rohan.grocery_booking.common.enums.UserType;
+import com.rohan.grocery_booking.common.util.Mapper;
 import com.rohan.grocery_booking.grocery.dao.MasterGroceryListDao;
 import com.rohan.grocery_booking.grocery.dao.UserGroceryCollectionDao;
 import com.rohan.grocery_booking.grocery.dao.UserGroceryListDao;
@@ -19,6 +21,7 @@ import com.rohan.grocery_booking.grocery.dto.UserGroceryListDto;
 import com.rohan.grocery_booking.grocery.entity.MasterGroceryList;
 import com.rohan.grocery_booking.grocery.entity.UserGroceryCollection;
 import com.rohan.grocery_booking.grocery.entity.UserGroceryList;
+import com.rohan.grocery_booking.grocery.model.UserGroceryCollectionModel;
 import com.rohan.grocery_booking.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -34,6 +37,7 @@ public class UserGroceryServiceImpl implements UserGroceryService {
 	private final UserGroceryCollectionDao userGroceryCollectionDao;
 	private final MasterGroceryListDao masterGroceryListDao;
 	private final UserService userService;
+	private final Mapper mapper;
 
 	/**
 	 * save or update user grocery
@@ -44,7 +48,7 @@ public class UserGroceryServiceImpl implements UserGroceryService {
 	 * @param userUuid
 	 */
 	@Override
-	public void saveOrUpdateUserGrocery(UserGroceryDto userGroceryDto, String userUuid) {
+	public UserGroceryCollectionModel saveOrUpdateUserGrocery(UserGroceryDto userGroceryDto, String userUuid) {
 		userService.matchUserRole(userUuid, UserType.USER);
 
 		if (userGroceryDto.getUserGroceryCollectionUuid() != null
@@ -55,44 +59,69 @@ public class UserGroceryServiceImpl implements UserGroceryService {
 
 			if (groceryCollection != null) {
 
-				Map<String, UserGroceryList> userGroceryListMap = groceryCollection.getUserGroceryLists().stream()
-						.collect(Collectors.toMap(UserGroceryList::getUuid, userGroceryList -> userGroceryList));
+				Map<String, UserGroceryList> userGroceryListMap = collectUserGroceryList(groceryCollection);
 
 				List<UserGroceryList> userGroceryLists = userGroceryDto.getUserGroceryList().stream()
 						.map(userGroceryListDto -> {
 
 							String groceryListUuid = userGroceryListDto.getUserGroceryListUuid();
 
-							if (groceryListUuid != null && !groceryListUuid.isBlank()) {
-								UserGroceryList savedUserGroceryList = userGroceryListMap
-										.get(userGroceryListDto.getUserGroceryListUuid());
+							UserGroceryList savedUserGroceryList = (groceryListUuid != null
+									&& !groceryListUuid.isBlank()) ? userGroceryListMap.get(groceryListUuid) : null;
 
-								if (savedUserGroceryList != null) {
-									updateGroceryList(savedUserGroceryList, userGroceryListDto);
-									return savedUserGroceryList;
-								} else {
-									return createUserGroceryList(userGroceryListDto);
-								}
+							if (savedUserGroceryList != null) {
+								updateGroceryList(savedUserGroceryList, userGroceryListDto);
+								return savedUserGroceryList;
 							}
 							return createUserGroceryList(userGroceryListDto);
 						}).toList();
 
 				groceryCollection.setUserGroceryLists(userGroceryLists);
-				userGroceryCollectionDao.saveUserGroceryCollection(groceryCollection);
-
-			} else {
-				UserGroceryCollection userGroceryCollection = createNewUserGroceryCollection(userGroceryDto, userUuid);
-				
-				userGroceryCollectionDao.saveUserGroceryCollection(userGroceryCollection);
+				return mapper.convert(userGroceryCollectionDao.saveUserGroceryCollection(groceryCollection),
+						UserGroceryCollectionModel.class);
 			}
-		} else {
-
-			UserGroceryCollection userGroceryCollection = createNewUserGroceryCollection(userGroceryDto, userUuid);
-			
-			userGroceryCollectionDao.saveUserGroceryCollection(userGroceryCollection);
 		}
+		return mapper.convert(userGroceryCollectionDao.saveUserGroceryCollection(
+				createNewUserGroceryCollection(userGroceryDto, userUuid)), UserGroceryCollectionModel.class);
 	}
-	
+
+	/**
+	 * get list of user grocery collection by user uuid
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param userUuid
+	 * @return {@klink List}
+	 * @see UserGroceryCollectionModel
+	 */
+	@Override
+	public List<UserGroceryCollectionModel> userGroceryCollectionsByUserUuid(String userUuid) {
+		userService.matchUserRole(userUuid, UserType.USER);
+		List<UserGroceryCollection> userGroceryCollections = userGroceryCollectionDao
+				.getAllGroceryCollectionByUserUuid(userUuid);
+
+		return mapper.convertToList(userGroceryCollections, UserGroceryCollectionModel.class);
+	}
+
+	/**
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param groceryCollection
+	 * @return {@link Map}
+	 */
+	private Map<String, UserGroceryList> collectUserGroceryList(UserGroceryCollection groceryCollection) {
+
+		Map<String, UserGroceryList> userGroceryListMap = new HashMap<>();
+
+		if (groceryCollection.getUserGroceryLists() != null && !groceryCollection.getUserGroceryLists().isEmpty()) {
+			userGroceryListMap = groceryCollection.getUserGroceryLists().stream()
+					.collect(Collectors.toMap(UserGroceryList::getUuid, userGroceryList -> userGroceryList));
+		}
+
+		return userGroceryListMap;
+	}
+
 	/**
 	 * 
 	 * @author rrohan419@gmail.com
@@ -113,7 +142,7 @@ public class UserGroceryServiceImpl implements UserGroceryService {
 		userGroceryLists = userGroceryListDao.saveAllGroceryLists(userGroceryLists);
 
 		userGroceryCollection.setUserGroceryLists(userGroceryLists);
-		
+
 		return userGroceryCollection;
 	}
 
