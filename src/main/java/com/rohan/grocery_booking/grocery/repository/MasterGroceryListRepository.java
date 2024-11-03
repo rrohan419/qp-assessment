@@ -17,7 +17,7 @@ public interface MasterGroceryListRepository extends JpaRepository<MasterGrocery
 
 	void deleteAllByUuidIn(List<String> uuid);
 	
-	boolean existsByName(String name);
+	boolean existsByNameAndEntityStatus(String name, EntityStatus entityStatus);
 	
 	MasterGroceryList findByUuid(String uuid);
 	

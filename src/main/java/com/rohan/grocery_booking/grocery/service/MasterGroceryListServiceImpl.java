@@ -119,6 +119,9 @@ public class MasterGroceryListServiceImpl implements MasterGroceryListService {
 		List<MasterGroceryList> updatedMasterGroceryLists = masterGroceryDtos.stream().map(masterGroceryDto -> {
 			MasterGroceryList masterGroceryList = masterGroceryListDao
 					.masterGroceryByUuid(masterGroceryDto.getMasterGroceryUuid());
+			if(masterGroceryList == null) {
+				throw new CustomException("grocery list not found with uuid : " + masterGroceryDto.getMasterGroceryUuid(), HttpStatus.NOT_FOUND);
+			}
 			MasterGroceryDto groceryDetailDto = masterGroceryDto.getMasterGrocery();
 			masterGroceryList.setName(groceryDetailDto.getName());
 			masterGroceryList.setPrice(groceryDetailDto.getPrice());

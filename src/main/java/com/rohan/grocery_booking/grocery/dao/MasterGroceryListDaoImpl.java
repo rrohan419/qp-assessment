@@ -85,7 +85,7 @@ public class MasterGroceryListDaoImpl implements MasterGroceryListDao {
 	@Override
 	public boolean groceryExistsByName(String name) {
 		try {
-			return masterGroceryListRepository.existsByName(name);
+			return masterGroceryListRepository.existsByNameAndEntityStatus(name, EntityStatus.ACTIVE);
 		} catch (Exception e) {
 			throw new CustomException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
