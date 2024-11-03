@@ -1,7 +1,7 @@
 package com.rohan.grocery_booking.common.enums;
 
 /**
- * @author Mindbowser | rohit.kavthekar@mindbowser.com
+ * @author rrohan419@gmail.com
  */
 public enum EntityStatus {
 

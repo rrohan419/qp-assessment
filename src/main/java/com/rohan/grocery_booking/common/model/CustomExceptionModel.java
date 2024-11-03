@@ -4,7 +4,6 @@
 package com.rohan.grocery_booking.common.model;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

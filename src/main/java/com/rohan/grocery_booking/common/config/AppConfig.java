@@ -19,7 +19,7 @@ public class AppConfig {
 	/**
 	 * Model mapper bean used to perform object mapping
 	 * 
-	 * @author Mindbowser | rohit.kavthekar@mindbowser.com
+	 * @author rrohan419@gmail.com
 	 * @return {@link ModelMapper}
 	 */
 	@Bean
