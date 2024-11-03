@@ -3,8 +3,11 @@
  */
 package com.rohan.grocery_booking.grocery.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.rohan.grocery_booking.common.enums.EntityStatus;
 import com.rohan.grocery_booking.grocery.entity.MasterGroceryList;
 
 /**
@@ -17,4 +20,6 @@ public interface MasterGroceryListRepository extends JpaRepository<MasterGrocery
 	boolean existsByName(String name);
 	
 	MasterGroceryList findByUuid(String uuid);
+	
+	List<MasterGroceryList> findByEntityStatus(EntityStatus entityStatus);
 }

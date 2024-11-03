@@ -21,4 +21,5 @@ public class ApiUrl {
 	public static final String USER_ADD_GROCERY = USER + "/add-grocery";
 	public static final String USER_FETCH_ALL_GROCERY = USER + "/fetch-grocery";
 	
+	public static final String FETCH_ALL_GROCERY = "/fetch-grocery";
 }

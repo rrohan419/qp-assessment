@@ -23,6 +23,7 @@ import com.rohan.grocery_booking.grocery.dto.UserGroceryListDto;
 import com.rohan.grocery_booking.grocery.entity.MasterGroceryList;
 import com.rohan.grocery_booking.grocery.entity.UserGroceryCollection;
 import com.rohan.grocery_booking.grocery.entity.UserGroceryList;
+import com.rohan.grocery_booking.grocery.model.MasterGroceryModel;
 import com.rohan.grocery_booking.grocery.model.UserGroceryCollectionModel;
 import com.rohan.grocery_booking.user.service.UserService;
 
@@ -52,7 +53,7 @@ public class UserGroceryServiceImpl implements UserGroceryService {
 	 */
 	@Transactional
 	@Override
-	public UserGroceryCollectionModel saveOrUpdateUserGrocery(UserGroceryDto userGroceryDto, String userUuid) {
+	public UserGroceryCollectionModel createOrUpdateUserGrocery(UserGroceryDto userGroceryDto, String userUuid) {
 		userService.matchUserRole(userUuid, UserType.USER);
 
 		if (userGroceryDto.getUserGroceryCollectionUuid() != null
@@ -108,6 +109,21 @@ public class UserGroceryServiceImpl implements UserGroceryService {
 		return mapper.convertToList(userGroceryCollections, UserGroceryCollectionModel.class);
 	}
 
+	/**
+	 * get all active groceries
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @return {@klink List}
+	 * @see MasterGroceryModel
+	 */
+	@Override
+	public List<MasterGroceryModel> getAllGroceries() {
+		List<MasterGroceryList> masterGroceryLists = masterGroceryListDao.fetchAllActiveList();
+		
+		return mapper.convertToList(masterGroceryLists, MasterGroceryModel.class);
+	}
+	
 	/**
 	 * 
 	 * @author rrohan419@gmail.com
@@ -199,5 +215,7 @@ public class UserGroceryServiceImpl implements UserGroceryService {
 		}
 		
 	}
+
+	
 
 }

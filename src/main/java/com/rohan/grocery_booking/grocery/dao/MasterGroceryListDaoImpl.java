@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
+import com.rohan.grocery_booking.common.enums.EntityStatus;
 import com.rohan.grocery_booking.common.exception.CustomException;
 import com.rohan.grocery_booking.grocery.entity.MasterGroceryList;
 import com.rohan.grocery_booking.grocery.repository.MasterGroceryListRepository;
@@ -35,7 +36,7 @@ public class MasterGroceryListDaoImpl implements MasterGroceryListDao {
 	@Override
 	public List<MasterGroceryList> fetchAllActiveList() {
 		try {
-			return masterGroceryListRepository.findAll();
+			return masterGroceryListRepository.findByEntityStatus(EntityStatus.ACTIVE);
 		} catch (Exception e) {
 			throw new CustomException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
