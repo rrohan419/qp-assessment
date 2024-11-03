@@ -22,6 +22,15 @@ public interface MasterGroceryListDao {
 	MasterGroceryList saveGrocery(MasterGroceryList masterGroceryList);
 	
 	/**
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param masterGroceryLists
+	 * @return
+	 */
+	List<MasterGroceryList> saveAllGrocries(List<MasterGroceryList> masterGroceryLists);
+	
+	/**
 	 * fetch all active master list
 	 *  
 	 * @author rrohan419@gmail.com
@@ -36,9 +45,9 @@ public interface MasterGroceryListDao {
 	 * 
 	 * @author rrohan419@gmail.com
 	 *
-	 * @param uuid
+	 * @param uuids
 	 */
-	void deleteGrocery(String uuid);
+	void deleteGrocriesByUuids(List<String> uuids);
 	
 	/**
 	 * check if grocery by name exists

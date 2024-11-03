@@ -33,13 +33,28 @@ public class UserGroceryListController {
 
 	private final UserGroceryService userGroceryService;
 
+	/**
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param userGroceryDto
+	 * @param userUuid
+	 * @return
+	 */
 	@PostMapping(ApiUrl.USER_ADD_GROCERY)
-	public ResponseEntity<UserGroceryCollectionModel> saveGroceryList(@RequestBody @Valid UserGroceryDto userGroceryDto,
+	public ResponseEntity<UserGroceryCollectionModel> saveUpdateGroceryList(@RequestBody @Valid UserGroceryDto userGroceryDto,
 			@RequestParam(required = true) String userUuid) {
 		UserGroceryCollectionModel response = userGroceryService.createOrUpdateUserGrocery(userGroceryDto, userUuid);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	/**
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param userUuid
+	 * @return
+	 */
 	@GetMapping(ApiUrl.USER_FETCH_ALL_GROCERY)
 	public ResponseEntity<List<UserGroceryCollectionModel>> fetchAllUserGroceryCollection(
 			@RequestParam(required = true) String userUuid) {
@@ -47,6 +62,10 @@ public class UserGroceryListController {
 		return new ResponseEntity<>(respose, HttpStatus.OK);
 	}
 	
+	/**
+	 * 
+	 * @author rrohan419@gmail.com
+	 */
 	@GetMapping(ApiUrl.FETCH_ALL_GROCERY)
 	public ResponseEntity<List<MasterGroceryModel>> fetchAllActiveGrocery() {
 		List<MasterGroceryModel> respose = userGroceryService.getAllGroceries();

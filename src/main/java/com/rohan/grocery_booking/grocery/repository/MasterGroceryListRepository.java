@@ -15,7 +15,7 @@ import com.rohan.grocery_booking.grocery.entity.MasterGroceryList;
  */
 public interface MasterGroceryListRepository extends JpaRepository<MasterGroceryList, Long> {
 
-	void deleteByUuid(String uuid);
+	void deleteAllByUuidIn(List<String> uuid);
 	
 	boolean existsByName(String name);
 	

@@ -24,6 +24,13 @@ public class MasterGroceryListDaoImpl implements MasterGroceryListDao {
 
 	private final MasterGroceryListRepository masterGroceryListRepository;
 
+	/**
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param masterGroceryList
+	 * @return
+	 */
 	@Override
 	public MasterGroceryList saveGrocery(MasterGroceryList masterGroceryList) {
 		try {
@@ -33,6 +40,14 @@ public class MasterGroceryListDaoImpl implements MasterGroceryListDao {
 		}
 	}
 
+	/**
+	 * fetch all active master list
+	 *  
+	 * @author rrohan419@gmail.com
+	 *
+	 * @return{@link List}
+	 * @see MasterGroceryList
+	 */
 	@Override
 	public List<MasterGroceryList> fetchAllActiveList() {
 		try {
@@ -42,16 +57,31 @@ public class MasterGroceryListDaoImpl implements MasterGroceryListDao {
 		}
 	}
 
+	/**
+	 * delete grocery by uuid
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param uuids
+	 */
 	@Override
-	public void deleteGrocery(String uuid) {
+	public void deleteGrocriesByUuids(List<String> uuids) {
 		try {
-			masterGroceryListRepository.deleteByUuid(uuid);
+			masterGroceryListRepository.deleteAllByUuidIn(uuids);
 		} catch (Exception e) {
 			throw new CustomException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
 
+	/**
+	 * check if grocery by name exists
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param name
+	 * @return{@link boolean}
+	 */
 	@Override
 	public boolean groceryExistsByName(String name) {
 		try {
@@ -73,6 +103,22 @@ public class MasterGroceryListDaoImpl implements MasterGroceryListDao {
 	public MasterGroceryList masterGroceryByUuid(String uuid) {
 		try {
 			return masterGroceryListRepository.findByUuid(uuid);
+		} catch (Exception e) {
+			throw new CustomException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	/**
+	 * 
+	 * @author rrohan419@gmail.com
+	 *
+	 * @param masterGroceryLists
+	 * @return
+	 */
+	@Override
+	public List<MasterGroceryList> saveAllGrocries(List<MasterGroceryList> masterGroceryLists) {
+		try {
+			return masterGroceryListRepository.saveAll(masterGroceryLists);
 		} catch (Exception e) {
 			throw new CustomException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
